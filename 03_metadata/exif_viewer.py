@@ -14,8 +14,8 @@ def get_exif_data(path: str) -> dict:
     Extracts the EXIF information from the provided photo
     """
     exif_data = {}
-    i = Image.open(path)
-    info = i._getexif()
+    image = Image.open(path)
+    info = image._getexif()
     for tag, value in info.items():
         decoded = TAGS.get(tag, tag)
         exif_data[decoded] = value
@@ -23,29 +23,15 @@ def get_exif_data(path: str) -> dict:
     return exif_data
 
 
-def get_photo_size(path: str) -> str:
-    photo_size = os.path.getsize(path)
-    photo_size = photo_size / 1024.0
-    if photo_size > 1000:
-        # photo is larger than 1 MB
-        photo_size = photo_size / 1024.0
-        size = f"{photo_size:.2f} MB"
-    else:
-        size = f"{photo_size:.2f} KB"
-    return size
-
-
 class Photo:
-    def __init__(self, photo: str) -> None:
-        """Constructor"""
-        self.exif_data = get_exif_data(photo)
-        self.filename = os.path.basename(photo)
-        self.filesize = get_photo_size(photo)
+    def __init__(self, photo_path: str) -> None:
+        self.exif_data = get_exif_data(photo_path)
+        self.filename = os.path.basename(photo_path)
+        self.filesize = os.path.getsize(photo_path)
 
 
 class MainPanel(wx.Panel):
     def __init__(self, parent: wx.Frame) -> None:
-        """Constructor"""
         super().__init__(parent)
 
         # dict of Exif keys and static text labels
@@ -142,7 +128,14 @@ class MainPanel(wx.Panel):
         if key == "Filename":
             txt_widget.SetValue(photo.filename)
         elif key == "FileSize":
-            txt_widget.SetValue(photo.filesize)
+            photo_size = photo.filesize / 1024.0
+            if photo_size > 1000:
+                # photo is larger than 1 MB
+                photo_size = photo_size / 1024.0
+                size = f"{photo_size:.2f} MB"
+            else:
+                size = f"{photo_size:.2f} KB"
+            txt_widget.SetValue(size)
         else:
             txt_widget.SetValue(str(value))
 
