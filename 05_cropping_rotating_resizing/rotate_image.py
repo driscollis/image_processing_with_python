@@ -6,7 +6,7 @@ from PIL import Image
 def rotate(image_path: str, degrees_to_rotate: int,
            saved_location: str) -> None:
     image_obj = Image.open(image_path)
-    rotated_image = image_obj.rotate(image_obj.ROTATE_180)
+    rotated_image = image_obj.rotate(degrees_to_rotate)
     rotated_image.save(saved_location)
 
 
