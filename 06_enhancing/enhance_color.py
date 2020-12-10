@@ -13,5 +13,5 @@ def enhance_color(image_path: str, enhance_factor:
 
 
 if __name__ == "__main__":
-    enhance_color("goldenrod_soldier_beetle.jpg", 0.0,
+    enhance_color("goldenrod_soldier_beetle.jpg", 2.5,
                   "beetle_color_enhanced.jpg")
