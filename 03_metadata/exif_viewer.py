@@ -9,7 +9,7 @@ from PIL.ExifTags import TAGS
 wildcard = "JPEG (*.jpg)|*.jpg|" "All files (*.*)|*.*"
 
 
-def get_exif_data(path: str) -> dict:
+def get_exif_data(path):
     """
     Extracts the EXIF information from the provided photo
     """
@@ -24,14 +24,14 @@ def get_exif_data(path: str) -> dict:
 
 
 class Photo:
-    def __init__(self, photo_path: str) -> None:
+    def __init__(self, photo_path):
         self.exif_data = get_exif_data(photo_path)
         self.filename = os.path.basename(photo_path)
         self.filesize = os.path.getsize(photo_path)
 
 
 class MainPanel(wx.Panel):
-    def __init__(self, parent: wx.Frame) -> None:
+    def __init__(self, parent):
         super().__init__(parent)
 
         # dict of Exif keys and static text labels
@@ -60,7 +60,7 @@ class MainPanel(wx.Panel):
         self.layout_widgets()
         self.SetSizer(self.main_sizer)
 
-    def layout_widgets(self) -> None:
+    def layout_widgets(self):
         ordered_widgets = [
             "Model",
             "ExifImageWidth",
@@ -84,17 +84,18 @@ class MainPanel(wx.Panel):
             else:
                 self.main_sizer.Add(wx.StaticLine(self), 0, wx.ALL | wx.EXPAND, 5)
 
-    def build_row(self, label: str, value: str, txt_name: str) -> None:
+    def build_row(self, label, value, txt_name):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         lbl = wx.StaticText(self, label=label, size=(95, -1))
         txt = wx.TextCtrl(
-            self, value=str(value), size=(150, -1), style=wx.TE_READONLY, name=txt_name
+            self, value=str(value), size=(150, -1), style=wx.TE_READONLY,
+            name=txt_name
         )
         sizer.Add(lbl, 0, wx.ALL | wx.CENTER, 5)
         sizer.Add(txt, 0, wx.ALL, 5)
         self.main_sizer.Add(sizer)
 
-    def on_load_file(self, event: wx.EVT_BUTTON) -> None:
+    def on_load_file(self, event):
         std_paths = wx.StandardPaths.Get()
         with wx.FileDialog(
             self,
@@ -109,7 +110,7 @@ class MainPanel(wx.Panel):
                 photo = Photo(path)
                 self.update_panel(photo)
 
-    def update_panel(self, photo: Photo) -> None:
+    def update_panel(self, photo):
         self.exif_data = photo.exif_data
 
         children = self.GetChildren()
@@ -117,7 +118,7 @@ class MainPanel(wx.Panel):
             if isinstance(child, wx.TextCtrl):
                 self.update(photo, child)
 
-    def update(self, photo: Photo, txt_widget: wx.TextCtrl) -> None:
+    def update(self, photo, txt_widget):
         key = txt_widget.GetName()
 
         if key in self.exif_data:
@@ -141,7 +142,7 @@ class MainPanel(wx.Panel):
 
 
 class PhotoInfo(wx.Frame):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__(None, title="Image Information")
         panel = MainPanel(self)
 

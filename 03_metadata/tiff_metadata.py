@@ -4,7 +4,7 @@ from PIL import Image
 from PIL.TiffTags import TAGS
 
 
-def get_metadata(image_file_path: str) -> dict:
+def get_metadata(image_file_path):
     image = Image.open(image_file_path)
     metadata = {}
     for tag in image.tag.items():

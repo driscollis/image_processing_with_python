@@ -4,7 +4,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 
 
-def get_exif(image_file_path: str) -> dict:
+def get_exif(image_file_path):
     exif_table = {}
     image = Image.open(image_file_path)
     info = image.getexif()
