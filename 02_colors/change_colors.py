@@ -19,7 +19,5 @@ def change_colors(image_path):
 
         image.save('changed_butterfly.png')
 
-    print()
-
 if __name__ == '__main__':
     print(change_colors('butterfly.jpg'))
