@@ -3,10 +3,8 @@
 from PIL import Image
 
 
-def create_thumbnail(
-    input_file_path: str, thumbnail_path: str,
-    thumbnail_size: tuple[int, int]
-) -> None:
+def create_thumbnail(input_file_path, thumbnail_path,
+                     thumbnail_size):
     with Image.open(input_file_path) as image:
         image.thumbnail(thumbnail_size)
         image.save(thumbnail_path, "JPEG")

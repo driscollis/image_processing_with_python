@@ -4,8 +4,7 @@ import wx
 
 
 class ImagePanel(wx.Panel):
-    def __init__(self, parent: wx.Frame,
-                 image_size: tuple[int, int]) -> None:
+    def __init__(self, parent, image_size):
         super().__init__(parent)
         self.max_size = 240
 
@@ -30,7 +29,7 @@ class ImagePanel(wx.Panel):
         main_sizer.Fit(parent)
         self.Layout()
 
-    def on_browse(self, event: wx.EVT_BUTTON) -> None:
+    def on_browse(self, event):
         """
         Browse for an image file
         @param event: The event object
@@ -44,7 +43,7 @@ class ImagePanel(wx.Panel):
                 self.photo_txt.SetValue(dialog.GetPath())
                 self.load_image()
 
-    def load_image(self) -> None:
+    def load_image(self):
         """
         Load the image and display it to the user
         """
@@ -67,7 +66,7 @@ class ImagePanel(wx.Panel):
 
 
 class MainFrame(wx.Frame):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__(None, title="Image Viewer")
         panel = ImagePanel(self, image_size=(240, 240))
         self.Show()
