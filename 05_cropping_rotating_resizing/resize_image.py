@@ -3,9 +3,7 @@
 from PIL import Image
 
 
-def resize(input_image_path: str,
-           output_image_path: str,
-           size: tuple[int, int]) -> None:
+def resize(input_image_path, output_image_path, size):
     original_image = Image.open(input_image_path)
     width, height = original_image.size
     print(f"The original image size is {width} wide x {height} high")

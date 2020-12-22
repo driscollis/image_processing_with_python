@@ -1,13 +1,12 @@
 # scale_image.py
 
 from PIL import Image
-from typing import Optional
 
 
-def scale(input_image_path: str,
-          output_image_path: str,
-          width: Optional[int] = None,
-          height: Optional[int] = None) -> None:
+def scale(input_image_path,
+          output_image_path,
+          width=None,
+          height=None):
     original_image = Image.open(input_image_path)
     w, h = original_image.size
     print(

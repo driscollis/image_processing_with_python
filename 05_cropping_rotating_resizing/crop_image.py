@@ -3,8 +3,7 @@
 from PIL import Image
 
 
-def crop_image(image_path: str, coords: tuple,
-               save_location: str) -> None:
+def crop_image(image_path, coords, save_location):
     image_obj = Image.open(image_path)
     cropped_image = image_obj.crop(coords)
     cropped_image.save(save_location)

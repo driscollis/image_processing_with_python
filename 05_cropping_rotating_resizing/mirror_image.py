@@ -3,7 +3,7 @@
 from PIL import Image
 
 
-def mirror(image_path: str, saved_location: str) -> None:
+def mirror(image_path, saved_location):
     image_obj = Image.open(image_path)
     rotated_image = image_obj.transpose(Image.FLIP_LEFT_RIGHT)
     rotated_image.save(saved_location)
