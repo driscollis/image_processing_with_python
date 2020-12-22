@@ -4,8 +4,7 @@ from PIL import Image
 from PIL import ImageEnhance
 
 
-def enhance_color(image_path: str, enhance_factor:
-                  float, output_path: str) -> None:
+def enhance_color(image_path, enhance_factor, output_path):
     image = Image.open(image_path)
     enhancer = ImageEnhance.Color(image)
     new_image = enhancer.enhance(enhance_factor)
