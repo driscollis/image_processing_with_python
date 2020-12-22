@@ -4,7 +4,7 @@ from PIL import Image
 from PIL import ImageFilter
 
 
-def color_lut(input_image: str, output_image: str) -> None:
+def color_lut(input_image, output_image):
     image = Image.open(input_image)
     filtered_image = image.filter(ImageFilter.Color3DLUT(2, [0, 1, 2] * 8))
     filtered_image.save(output_image)
