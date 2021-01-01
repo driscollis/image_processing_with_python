@@ -37,7 +37,7 @@ class ImagePanel(wx.Panel):
         wildcard = "JPEG files (*.jpg)|*.jpg"
         with wx.FileDialog(
             None, "Choose a file", wildcard=wildcard,
-            style=wx.ID_OPEN
+            style=wx.FD_OPEN
         ) as dialog:
             if dialog.ShowModal() == wx.ID_OK:
                 self.photo_txt.SetValue(dialog.GetPath())
@@ -59,7 +59,7 @@ class ImagePanel(wx.Panel):
         else:
             new_h = self.max_size
             new_w = self.max_size * W / H
-        img = img.Scale(new_w, new_h)
+        img = img.Scale(int(new_w), int(new_h))
 
         self.image_ctrl.SetBitmap(wx.Bitmap(img))
         self.Refresh()
