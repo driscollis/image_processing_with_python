@@ -4,11 +4,11 @@ from PIL import Image
 
 
 def resize(input_image_path, output_image_path, size):
-    original_image = Image.open(input_image_path)
-    width, height = original_image.size
+    image = Image.open(input_image_path)
+    width, height = image.size
     print(f"The original image size is {width} wide x {height} high")
 
-    resized_image = original_image.resize(size)
+    resized_image = image.resize(size)
     width, height = resized_image.size
     print(f"The resized image size is {width} wide x {height} high")
     resized_image.save(output_image_path)
