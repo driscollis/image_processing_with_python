@@ -15,8 +15,7 @@ def watermark_with_transparency(input_image_path, output_image_path,
 
 
 if __name__ == "__main__":
-    img = "hummingbird.jpg"
     watermark_with_transparency(
-        img, "hummingbird_watermarked2.jpg", "logo.png",
+        "hummingbird.jpg", "hummingbird_watermarked2.jpg", "logo.png",
         position=(0, 0)
     )
