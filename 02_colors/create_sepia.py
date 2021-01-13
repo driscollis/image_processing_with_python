@@ -7,9 +7,9 @@ def make_sepia_palette(color):
     palette = []
     r, g, b = color
     for i in range(255):
-        new_red = int(r * i / 255)
-        new_green = int(g * i / 255)
-        new_blue = int(b * i / 255)
+        new_red = r * i // 255
+        new_green = g * i // 255
+        new_blue = b * i // 255
         palette.extend((new_red, new_green, new_blue))
 
     return palette
