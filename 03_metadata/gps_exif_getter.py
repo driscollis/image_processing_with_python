@@ -13,11 +13,14 @@ def get_exif(image_file_path):
         exif_table[decoded] = value
 
     gps_info = {}
-    for key in exif_table['GPSInfo'].keys():
+    for key in exif_table['GPSInfo']:
         decode = GPSTAGS.get(key,key)
         gps_info[decode] = exif_table['GPSInfo'][key]
 
-    return gps_info
+    if gps_info:
+        return gps_info
+    else:
+        return "No GPS data found!"
 
 
 if __name__ == "__main__":
