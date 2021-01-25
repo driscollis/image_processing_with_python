@@ -1,4 +1,4 @@
-# draw_text_f=default_font.py
+# draw_text_default_font.py
 
 from PIL import Image, ImageDraw, ImageFont
 
