@@ -10,5 +10,5 @@ url = "http://my_url/photo.jpg"
 f = urllib.request.urlopen(url)
 data = f.read()
 
-image = Image.open(io.BytesIO(data))
-image.show("Downloaded Image")
+with Image.open(io.BytesIO(data)) as image:
+    image.show("Downloaded Image")
