@@ -9,7 +9,7 @@ def scale(input_image_path,
           height=None):
     image = Image.open(input_image_path)
     w, h = image.size
-    print(f"The original image size is {wide} wide x {height} high")
+    print(f"The image size is {w} wide x {h} high")
 
     if width and height:
         max_size = (width, height)
@@ -26,7 +26,7 @@ def scale(input_image_path,
 
     scaled_image = Image.open(output_image_path)
     width, height = scaled_image.size
-    print(f"The scaled image size is {wide} wide x {height} high")
+    print(f"The scaled image size is {width} wide x {height} high")
 
 
 if __name__ == "__main__":
