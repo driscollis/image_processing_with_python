@@ -24,9 +24,8 @@ def apply_text(values, window):
     x, y = int(values['text-x']), int(values['text-y'])
     text = values["text"]
 
-    shutil.copy(image_file, tmp_file)
-
     if image_file:
+        shutil.copy(image_file, tmp_file)
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
 
@@ -34,6 +33,7 @@ def apply_text(values, window):
             draw = ImageDraw.Draw(image)
             font = ImageFont.truetype(font_name, size=font_size)
             draw.text((x, y), text=text, font=font, fill=color)
+            image.save(tmp_file)
 
         photo_img = ImageTk.PhotoImage(image)
         window["image"].update(data=photo_img)
