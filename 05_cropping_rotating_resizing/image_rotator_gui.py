@@ -27,7 +27,7 @@ def apply_rotate(image_file, effect):
     elif effect == "Rotate 180":
         rotate(image_file, 180, tmp_file)
     elif effect == "Rotate 270":
-        rotate(image_file, 180, tmp_file)
+        rotate(image_file, 270, tmp_file)
 
 
 def apply_effect(values, window):
