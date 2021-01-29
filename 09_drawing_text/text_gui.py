@@ -16,12 +16,19 @@ file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
 tmp_file = tempfile.NamedTemporaryFile(suffix=".jpg").name
 
 
+def get_value(key, values):
+    value = values[key]
+    if value:
+        return int(value)
+    return 0
+
+
 def apply_text(values, window):
     image_file = values["filename"]
     font_name = values["ttf"]
-    font_size = int(values["font_size"])
+    font_size = get_value("font_size", values)
     color = values["colors"]
-    x, y = int(values['text-x']), int(values['text-y'])
+    x, y = get_value("text-x", values), get_value("text-y", values)
     text = values["text"]
 
     if image_file:
