@@ -41,6 +41,7 @@ def apply_drawing(values, window):
             draw.rectangle((begin_x, begin_y, end_x, end_y),
                            fill=fill_color, width=width,
                            outline=outline_color)
+        image.save(tmp_file)
 
         photo_img = ImageTk.PhotoImage(image)
         window["image"].update(data=photo_img)
@@ -112,6 +113,8 @@ def main():
             break
         if event in events:
             apply_drawing(values, window)
+        if event == "save" and values["filename"]:
+            save_image(values)
     window.close()
 
 if __name__ == "__main__":
