@@ -38,7 +38,10 @@ def apply_text(values, window):
 
         if text:
             draw = ImageDraw.Draw(image)
-            font = ImageFont.truetype(font_name, size=font_size)
+            if font_name == "Default Font":
+                font = None
+            else:
+                font = ImageFont.truetype(font_name, size=font_size)
             draw.text((x, y), text=text, font=font, fill=color)
             image.save(tmp_file)
 
@@ -54,8 +57,13 @@ def create_row(label, key, file_types):
     ]
 
 
-def get_ttf_files():
-    ttf_files = glob.glob("*.ttf")
+def get_ttf_files(directory=None):
+    if directory is not None:
+        ttf_files = glob.glob(directory + "/*.ttf")
+    else:
+        ttf_files = glob.glob("*.ttf")
+    if not ttf_files:
+        return {"Default Font": None}
     ttf_dict = {}
     for ttf in ttf_files:
         ttf_dict[os.path.basename(ttf)] = ttf
@@ -75,12 +83,24 @@ def save_image(values):
             sg.popup(f"Saved: {save_filename}")
 
 
+def update_ttf_values(window):
+    directory = sg.popup_get_folder("Get TTF Directory")
+    if directory is not None:
+        ttf_files = get_ttf_files(directory)
+        new_values = list(ttf_files.keys())
+        window["ttf"].update(values=new_values,
+                             value=new_values[0])
+
+
 def main():
     colors = list(ImageColor.colormap.keys())
     ttf_files = get_ttf_files()
     ttf_filenames = list(ttf_files.keys())
 
+    menu_items = [["File", ["Open Font Directory"]]]
+
     elements = [
+        [sg.Menu(menu_items)],
         [sg.Image(key="image")],
         create_row("Image File:", "filename", file_types),
         [sg.Text("Text:"), sg.Input(key="text", enable_events=True)],
@@ -117,6 +137,8 @@ def main():
             apply_text(values, window)
         if event == "save" and values["filename"]:
             save_image(values)
+        if event == "Open Font Directory":
+            update_ttf_values(window)
 
     window.close()
 
