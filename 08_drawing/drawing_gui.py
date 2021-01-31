@@ -1,5 +1,6 @@
 # drawing_gui.py
 
+import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
@@ -27,9 +28,8 @@ def apply_drawing(values, window):
     fill_color = values["fill_color"]
     outline_color = values["outline_color"]
 
-    shutil.copy(image_file, tmp_file)
-
-    if image_file:
+    if image_file and os.path.exists(image_file):
+        shutil.copy(image_file, tmp_file)
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
         draw = ImageDraw.Draw(image)

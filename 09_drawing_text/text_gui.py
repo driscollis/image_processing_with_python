@@ -31,7 +31,7 @@ def apply_text(values, window):
     x, y = get_value("text-x", values), get_value("text-y", values)
     text = values["text"]
 
-    if image_file:
+    if image_file and os.path.exists(image_file):
         shutil.copy(image_file, tmp_file)
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
