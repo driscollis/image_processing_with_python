@@ -27,8 +27,9 @@ effects = {
     "Negative": invert,
     "Hard Light": hard_light,
     "Soft Light": soft_light,
-    "Overlay": overlay
+    "Overlay": overlay,
 }
+
 
 def apply_effect(values, window):
     selected_effect = values["effects"]
@@ -40,8 +41,7 @@ def apply_effect(values, window):
         elif selected_effect == "Negative":
             effects[selected_effect](image_file_one, tmp_file)
         else:
-            effects[selected_effect](image_file_one, image_file_two,
-                                     tmp_file)
+            effects[selected_effect](image_file_one, image_file_two, tmp_file)
 
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
@@ -62,8 +62,7 @@ def save_image(values):
         "File", file_types=file_types, save_as=True, no_window=True
     )
     if save_filename == values["filename_one"]:
-        sg.popup_error(
-            "You are not allowed to overwrite the original image!")
+        sg.popup_error("You are not allowed to overwrite the original image!")
     else:
         if save_filename:
             shutil.copy(tmp_file, save_filename)
@@ -79,8 +78,7 @@ def main():
         [
             sg.Text("Effect"),
             sg.Combo(
-                effect_names, default_value="Normal", key="effects",
-                enable_events=True
+                effect_names, default_value="Normal", key="effects", enable_events=True
             ),
         ],
         [sg.Button("Save", key="save")],
