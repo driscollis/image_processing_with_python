@@ -1,5 +1,6 @@
 # imagechops_gui.py
 
+import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
@@ -35,13 +36,19 @@ def apply_effect(values, window):
     selected_effect = values["effects"]
     image_file_one = values["filename_one"]
     image_file_two = values["filename_two"]
-    if image_file_one:
+    if os.path.exists(image_file_one):
+        shutil.copy(image_file_one, tmp_file)
         if selected_effect == "Normal":
             effects[selected_effect](image_file_one, tmp_file)
         elif selected_effect == "Negative":
             effects[selected_effect](image_file_one, tmp_file)
-        else:
-            effects[selected_effect](image_file_one, image_file_two, tmp_file)
+        elif os.path.exists(image_file_two):
+            effects[selected_effect](image_file_one, image_file_two,
+                                     tmp_file)
+        elif selected_effect not in ["Normal", "Negative"]:
+            sg.popup("You need both images selected to apply "
+                     "this effect!")
+            return
 
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
@@ -61,8 +68,10 @@ def save_image(values):
     save_filename = sg.popup_get_file(
         "File", file_types=file_types, save_as=True, no_window=True
     )
-    if save_filename == values["filename_one"]:
-        sg.popup_error("You are not allowed to overwrite the original image!")
+    filenames = [values["filename_one"], values["filename_two"]]
+    if save_filename in filenames:
+        sg.popup_error(
+            "You are not allowed to overwrite the original image!")
     else:
         if save_filename:
             shutil.copy(tmp_file, save_filename)
@@ -78,7 +87,8 @@ def main():
         [
             sg.Text("Effect"),
             sg.Combo(
-                effect_names, default_value="Normal", key="effects", enable_events=True
+                effect_names, default_value="Normal", key="effects",
+                enable_events=True
             ),
         ],
         [sg.Button("Save", key="save")],
