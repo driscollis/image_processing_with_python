@@ -100,7 +100,7 @@ def main():
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event in ["filename", "effects"]:
+        if event in ["filename_one", "filename_two", "effects"]:
             apply_effect(values, window)
         if event == "save" and values["filename_one"]:
             save_image(values)
