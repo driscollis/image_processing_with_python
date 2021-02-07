@@ -9,10 +9,10 @@ file_types = [("JPEG (*.jpg)", "*.jpg"),
 
 def main():
     elements = [
-        [sg.Image(key="image")],
+        [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="file"),
+            sg.Input(size=(25, 1), enable_events=True, key="-FILE-"),
             sg.FileBrowse(file_types=file_types),
         ],
     ]
@@ -23,11 +23,11 @@ def main():
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event == "file":
-            image = Image.open(values["file"])
+        if event == "-FILE-":
+            image = Image.open(values["-FILE-"])
             image.thumbnail((400, 400))
             photo_img = ImageTk.PhotoImage(image)
-            window["image"].update(data=photo_img)
+            window["-IMAGE-"].update(data=photo_img)
 
     window.close()
 
