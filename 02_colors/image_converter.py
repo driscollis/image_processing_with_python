@@ -27,20 +27,21 @@ def main():
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="-FILENAME-"),
+            sg.Input(size=(25, 1), enable_events=True, key="-FILENAME-",
+                     readonly=True),
             sg.FileBrowse(file_types=file_types),
         ],
         [
             sg.Text("Effect"),
             sg.Combo(
                 effect_names, default_value="Normal", key="-EFFECTS-",
-                enable_events=True
+                enable_events=True, readonly=True
             ),
         ],
         [sg.Button("Save")],
     ]
 
-    window = sg.Window("Image Converter", layout)
+    window = sg.Window("Image Converter", layout, size=(450, 500))
 
     while True:
         event, values = window.read()
