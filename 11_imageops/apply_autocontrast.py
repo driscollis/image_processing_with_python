@@ -2,6 +2,7 @@
 
 from PIL import Image, ImageOps
 
+
 def autocontrast(image_path, output_path, cutoff=0,
                  ignore=None):
     image = Image.open(image_path)

@@ -2,6 +2,7 @@
 
 from PIL import Image, ImageOps
 
+
 def colorize(image_path, output_path, black, white):
     image = Image.open(image_path)
     converted_image = ImageOps.colorize(image, black, white)
