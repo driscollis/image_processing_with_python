@@ -8,7 +8,7 @@ file_types = [("JPEG (*.jpg)", "*.jpg"),
 
 
 def main():
-    elements = [
+    layout = [
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
@@ -17,7 +17,7 @@ def main():
         ],
     ]
 
-    window = sg.Window("Image Viewer", elements)
+    window = sg.Window("Image Viewer", layout)
 
     while True:
         event, values = window.read()

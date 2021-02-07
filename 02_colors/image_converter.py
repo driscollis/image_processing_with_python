@@ -23,7 +23,7 @@ effects = {
 
 def main():
     effect_names = list(effects.keys())
-    elements = [
+    layout = [
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
@@ -40,7 +40,7 @@ def main():
         [sg.Button("Save")],
     ]
 
-    window = sg.Window("Image Converter", elements)
+    window = sg.Window("Image Converter", layout)
 
     while True:
         event, values = window.read()
