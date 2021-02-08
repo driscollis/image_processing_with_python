@@ -90,7 +90,7 @@ def update_ttf_values(window):
         ttf_files = get_ttf_files(directory)
         new_values = list(ttf_files.keys())
         window["-TTF-"].update(values=new_values,
-                             value=new_values[0])
+                               value=new_values[0])
 
 
 def main():
