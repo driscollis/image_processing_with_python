@@ -17,16 +17,17 @@ def get_value(key, values):
         return int(value)
     return 0
 
+
 def apply_drawing(values, window):
-    image_file = values["filename"]
-    shape = values["shapes"]
-    begin_x = get_value("begin_x", values)
-    begin_y = get_value("begin_y", values)
-    end_x = get_value("end_x", values)
-    end_y = get_value("end_y", values)
-    width = get_value("width", values)
-    fill_color = values["fill_color"]
-    outline_color = values["outline_color"]
+    image_file = values["-FILENAME-"]
+    shape = values["-SHAPES-"]
+    begin_x = get_value("-BEGIN_X-", values)
+    begin_y = get_value("-BEGIN_Y-", values)
+    end_x = get_value("-END_X-", values)
+    end_y = get_value("-END_Y-", values)
+    width = get_value("-WIDTH-", values)
+    fill_color = values["-FILL_COLOR-"]
+    outline_color = values["-OUTLINE_COLOR-"]
 
     if image_file and os.path.exists(image_file):
         shutil.copy(image_file, tmp_file)
@@ -34,17 +35,24 @@ def apply_drawing(values, window):
         image.thumbnail((400, 400))
         draw = ImageDraw.Draw(image)
         if shape == "Ellipse":
-            draw.ellipse((begin_x, begin_y, end_x, end_y),
-                         fill=fill_color, width=width,
-                         outline=outline_color)
+            draw.ellipse(
+                (begin_x, begin_y, end_x, end_y),
+                fill=fill_color,
+                width=width,
+                outline=outline_color,
+            )
         elif shape == "Rectangle":
-            draw.rectangle((begin_x, begin_y, end_x, end_y),
-                           fill=fill_color, width=width,
-                           outline=outline_color)
+            draw.rectangle(
+                (begin_x, begin_y, end_x, end_y),
+                fill=fill_color,
+                width=width,
+                outline=outline_color,
+            )
         image.save(tmp_file)
 
         photo_img = ImageTk.PhotoImage(image)
-        window["image"].update(data=photo_img)
+        window["-IMAGE-"].update(data=photo_img)
+
 
 def create_coords_elements(label, begin_x, begin_y, key1, key2):
     return [
@@ -53,11 +61,12 @@ def create_coords_elements(label, begin_x, begin_y, key1, key2):
         sg.Input(begin_y, size=(5, 1), key=key2, enable_events=True),
     ]
 
+
 def save_image(values):
     save_filename = sg.popup_get_file(
         "File", file_types=file_types, save_as=True, no_window=True
     )
-    if save_filename == values["filename"]:
+    if save_filename == values["-FILENAME-"]:
         sg.popup_error(
             "You are not allowed to overwrite the original image!")
     else:
@@ -68,54 +77,80 @@ def save_image(values):
 
 def main():
     colors = list(ImageColor.colormap.keys())
-    elements = [
-        [sg.Image(key="image")],
+    layout = [
+        [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="filename"),
+            sg.Input(
+                size=(25, 1), enable_events=True, key="-FILENAME-",
+                readonly=True
+            ),
             sg.FileBrowse(file_types=file_types),
         ],
         [
             sg.Text("Shapes"),
             sg.Combo(
-                ["Ellipse", "Rectangle"], default_value="Ellipse",
-                key="shapes", enable_events=True
+                ["Ellipse", "Rectangle"],
+                default_value="Ellipse",
+                key="-SHAPES-",
+                enable_events=True,
+                readonly=True,
             ),
-
         ],
         [
-            *create_coords_elements("Begin Coords", "10", "10",
-                                    "begin_x", "begin_y"),
-            *create_coords_elements("End Coords", "100", "100",
-                                    "end_x", "end_y"),
+            *create_coords_elements(
+                "Begin Coords", "10", "10", "-BEGIN_X-", "-BEGIN_Y-"
+            ),
+            *create_coords_elements(
+                "End Coords", "100", "100", "-END_X-", "-END_Y-"
+            ),
         ],
         [
             sg.Text("Fill"),
-            sg.Combo(colors, default_value=colors[0], key='fill_color',
-                     enable_events=True),
+            sg.Combo(
+                colors,
+                default_value=colors[0],
+                key="-FILL_COLOR-",
+                enable_events=True,
+                readonly=True
+            ),
             sg.Text("Outline"),
-            sg.Combo(colors, default_value=colors[0], key='outline_color',
-                     enable_events=True),
+            sg.Combo(
+                colors,
+                default_value=colors[0],
+                key="-OUTLINE_COLOR-",
+                enable_events=True,
+                readonly=True
+            ),
             sg.Text("Width"),
-            sg.Input("3", size=(5, 1), key="width", enable_events=True)
-
+            sg.Input("3", size=(5, 1), key="-WIDTH-", enable_events=True),
         ],
-        [sg.Button("Save", key="save")],
+        [sg.Button("Save")],
     ]
 
-    window = sg.Window("Drawing GUI", elements)
+    window = sg.Window("Drawing GUI", layout, size=(450, 500))
 
-    events = ["filename", "begin_x", "begin_y", "end_x", "end_y",
-              "fill_color", "outline_color", "width", "shapes"]
+    events = [
+        "-FILENAME-",
+        "-BEGIN_X-",
+        "-BEGIN_Y-",
+        "-END_X-",
+        "-END_Y-",
+        "-FILL_COLOR-",
+        "-OUTLINE_COLOR-",
+        "-WIDTH-",
+        "-SHAPES-",
+    ]
     while True:
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
         if event in events:
             apply_drawing(values, window)
-        if event == "save" and values["filename"]:
+        if event == "Save" and values["-FILENAME-"]:
             save_image(values)
     window.close()
+
 
 if __name__ == "__main__":
     main()
