@@ -1,10 +1,12 @@
 # watermark_gui.py
 
+import io
+import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
 
-from PIL import Image, ImageTk
+from PIL import Image
 from watermark_transparent import watermark_with_transparency
 
 file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
@@ -13,21 +15,21 @@ tmp_file = tempfile.NamedTemporaryFile(suffix=".jpg").name
 def convert_image(image_path):
     image = Image.open(image_path)
     image.thumbnail((400, 400))
-    return ImageTk.PhotoImage(image)
+    bio = io.BytesIO()
+    image.save(bio, format="PNG")
+    return bio.getvalue()
 
 
 def create_row(label, key, file_types, save=False):
     if save:
         return [
         sg.Text(label),
-        sg.Input(size=(25, 1), enable_events=True, key=key,
-                 readonly=True),
+        sg.Input(size=(25, 1), key=key),
         sg.FileSaveAs(file_types=file_types)
     ]
     return [
         sg.Text(label),
-        sg.Input(size=(25, 1), enable_events=True, key=key,
-                 readonly=True),
+        sg.Input(size=(25, 1), key=key),
         sg.FileBrowse(file_types=file_types),
     ]
 
@@ -73,6 +75,7 @@ def main():
         create_row("Image File:", "-FILENAME-", file_types),
         create_row("Watermark File:", "-WATERMARK-",
                    [("PNG (*.png)", "*.png")]),
+        [sg.Button("Load Image")],
         [
             sg.Text("Watermark Position"),
             sg.Text("X:"),
@@ -91,27 +94,32 @@ def main():
 
     while True:
         event, values = window.read()
+
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event == "-FILENAME-":
+
+        watermark_x = values["-WATERMARK-X-"]
+        watermark_y = values["-WATERMARK-Y-"]
+
+        if event == "Load Image":
             filename = values["-FILENAME-"]
-            if filename:
-                photo_img = convert_image(values["-FILENAME-"])
+            if os.path.exists(filename):
+                photo_img = convert_image(filename)
                 window["-IMAGE-"].update(data=photo_img)
-                original_image = values["-FILENAME-"]
+                original_image = filename
                 shutil.copy(original_image, tmp_file)
         if event in ["-WATERMARK-X-", "-WATERMARK-Y-"]:
             # filter watermark position to integers
-            if values["-WATERMARK-X-"] and values["-WATERMARK-Y-"]:
-                if not values["-WATERMARK-X-"][-1].isdigit():
-                    window["-WATERMARK-X-"].update(values["-WATERMARK-X-"][:-1])
-                if not values["-WATERMARK-Y-"][-1].isdigit():
-                    window["-WATERMARK-Y-"].update(values["-WATERMARK-Y-"][:-1])
+            if watermark_x and watermark_y:
+                if not watermark_x[-1].isdigit():
+                    window["-WATERMARK-X-"].update(watermark_x[:-1])
+                if not watermark_y[-1].isdigit():
+                    window["-WATERMARK-Y-"].update(watermark_y[:-1])
         if event == "Apply Watermark":
             if check_for_errors(values):
                 continue
-            position = (int(values["-WATERMARK-X-"]),
-                        int(values["-WATERMARK-Y-"]))
+            position = (int(watermark_x),
+                        int(watermark_y))
             apply_watermark(original_image, values, position, window)
         if event == "Save Image" and values["-FILENAME-"]:
             save_image(values)

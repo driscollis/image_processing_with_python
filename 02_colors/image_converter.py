@@ -1,5 +1,7 @@
 # image_converter.py
 
+import io
+import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
@@ -7,7 +9,7 @@ import tempfile
 from create_bw import black_and_white
 from create_grayscale import grayscale
 from create_sepia import create_sepia as sepia
-from PIL import Image, ImageTk
+from PIL import Image
 
 file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
 
@@ -27,9 +29,9 @@ def main():
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="-FILENAME-",
-                     readonly=True),
+            sg.Input(size=(25, 1), key="-FILENAME-"),
             sg.FileBrowse(file_types=file_types),
+            sg.Button("Load Image")
         ],
         [
             sg.Text("Effect"),
@@ -47,15 +49,16 @@ def main():
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event in ["-FILENAME-", "-EFFECTS-"]:
+        if event in ["Load Image", "-EFFECTS-"]:
             selected_effect = values["-EFFECTS-"]
             image_file = values["-FILENAME-"]
-            if image_file:
+            if os.path.exists(image_file):
                 effects[selected_effect](image_file, tmp_file)
                 image = Image.open(tmp_file)
                 image.thumbnail((400, 400))
-                photo_img = ImageTk.PhotoImage(image)
-                window["-IMAGE-"].update(data=photo_img)
+                bio = io.BytesIO()
+                image.save(bio, format="PNG")
+                window["-IMAGE-"].update(data=bio.getvalue())
         if event == "Save" and values["-FILENAME-"]:
             save_filename = sg.popup_get_file(
                 "File", file_types=file_types, save_as=True, no_window=True

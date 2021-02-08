@@ -1,5 +1,7 @@
 # image_filter_gui.py
 
+import io
+import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
@@ -10,7 +12,7 @@ from detail_image import detail
 from edge_enhance_image import edge_enhance
 from emboss_image import emboss
 from find_edges_image import find_edges
-from PIL import Image, ImageTk
+from PIL import Image
 
 file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
 
@@ -29,12 +31,13 @@ effects = {
 def apply_effect(values, window):
     selected_effect = values["-EFFECTS-"]
     image_file = values["-FILENAME-"]
-    if image_file:
+    if os.path.exists(image_file):
         effects[selected_effect](image_file, tmp_file)
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
-        photo_img = ImageTk.PhotoImage(image)
-        window["-IMAGE-"].update(data=photo_img)
+        bio = io.BytesIO()
+        image.save(bio, format="PNG")
+        window["-IMAGE-"].update(data=bio.getvalue())
 
 
 def save_image(values):
@@ -56,9 +59,9 @@ def main():
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="-FILENAME-",
-                     readonly=True),
+            sg.Input(size=(25, 1), key="-FILENAME-"),
             sg.FileBrowse(file_types=file_types),
+            sg.Button("Load Image")
         ],
         [
             sg.Text("Effect"),
@@ -76,7 +79,7 @@ def main():
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event in ["-FILENAME-", "-EFFECTS-"]:
+        if event in ["Load Image", "-EFFECTS-"]:
             apply_effect(values, window)
         if event == "Save" and values["-FILENAME-"]:
             save_image(values)

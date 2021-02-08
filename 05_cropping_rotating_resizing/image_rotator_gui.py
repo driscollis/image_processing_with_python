@@ -1,12 +1,14 @@
 # image_rotator_gui.py
 
+import io
+import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
 
 from mirror_image import mirror
 from rotate_image import rotate
-from PIL import Image, ImageTk
+from PIL import Image
 
 file_types = [("JPEG (*.jpg)", "*.jpg"),
               ("All files (*.*)", "*.*")]
@@ -33,22 +35,23 @@ def apply_rotate(image_file, effect):
 def apply_effect(values, window):
     selected_effect = values["-EFFECTS-"]
     image_file = values["-FILENAME-"]
-    if image_file:
+    if os.path.exists(image_file):
         if "Rotate" in selected_effect:
             apply_rotate(image_file, selected_effect)
         else:
             effects[selected_effect](image_file, tmp_file)
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
-        photo_img = ImageTk.PhotoImage(image)
-        window["-IMAGE-"].update(data=photo_img)
+        bio = io.BytesIO()
+        image.save(bio, format="PNG")
+        window["-IMAGE-"].update(data=bio.getvalue())
 
 
-def save_image(values):
+def save_image(image_filename):
     save_filename = sg.popup_get_file(
         "File", file_types=file_types, save_as=True, no_window=True
     )
-    if save_filename == values["-FILENAME-"]:
+    if save_filename == image_filename:
         sg.popup_error(
             "You are not allowed to overwrite the original image!")
     else:
@@ -63,9 +66,9 @@ def main():
         [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="-FILENAME-",
-                     readonly=True),
+            sg.Input(size=(25, 1), key="-FILENAME-"),
             sg.FileBrowse(file_types=file_types),
+            sg.Button("Load Image")
         ],
         [
             sg.Text("Effect"),
@@ -81,12 +84,13 @@ def main():
 
     while True:
         event, values = window.read()
+        image_filename = values["-FILENAME-"]
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event in ["-FILENAME-", "-EFFECTS-"]:
+        if event in ["Load Image", "-EFFECTS-"]:
             apply_effect(values, window)
-        if event == "Save" and values["-FILENAME-"]:
-            save_image(values)
+        if event == "Save" and image_filename:
+            save_image(image_filename)
 
     window.close()
 

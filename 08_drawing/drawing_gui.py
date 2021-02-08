@@ -1,11 +1,12 @@
 # drawing_gui.py
 
+import io
 import os
 import PySimpleGUI as sg
 import shutil
 import tempfile
 
-from PIL import Image, ImageColor, ImageDraw, ImageTk
+from PIL import Image, ImageColor, ImageDraw
 
 file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
 tmp_file = tempfile.NamedTemporaryFile(suffix=".jpg").name
@@ -13,7 +14,7 @@ tmp_file = tempfile.NamedTemporaryFile(suffix=".jpg").name
 
 def get_value(key, values):
     value = values[key]
-    if value:
+    if value.isdigit():
         return int(value)
     return 0
 
@@ -29,7 +30,7 @@ def apply_drawing(values, window):
     fill_color = values["-FILL_COLOR-"]
     outline_color = values["-OUTLINE_COLOR-"]
 
-    if image_file and os.path.exists(image_file):
+    if os.path.exists(image_file):
         shutil.copy(image_file, tmp_file)
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
@@ -50,8 +51,9 @@ def apply_drawing(values, window):
             )
         image.save(tmp_file)
 
-        photo_img = ImageTk.PhotoImage(image)
-        window["-IMAGE-"].update(data=photo_img)
+        bio = io.BytesIO()
+        image.save(bio, format="PNG")
+        window["-IMAGE-"].update(data=bio.getvalue())
 
 
 def create_coords_elements(label, begin_x, begin_y, key1, key2):
@@ -82,10 +84,10 @@ def main():
         [
             sg.Text("Image File"),
             sg.Input(
-                size=(25, 1), enable_events=True, key="-FILENAME-",
-                readonly=True
+                size=(25, 1), key="-FILENAME-"
             ),
             sg.FileBrowse(file_types=file_types),
+            sg.Button("Load Image"),
         ],
         [
             sg.Text("Shapes"),
@@ -131,7 +133,7 @@ def main():
     window = sg.Window("Drawing GUI", layout, size=(450, 500))
 
     events = [
-        "-FILENAME-",
+        "Load Image",
         "-BEGIN_X-",
         "-BEGIN_Y-",
         "-END_X-",
