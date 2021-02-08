@@ -49,27 +49,27 @@ def get_exif_data(path):
 
 
 def main():
-    elements = [
+    layout = [
         [
             sg.FileBrowse(
-                "Load image data", file_types=file_types, key="load",
+                "Load image data", file_types=file_types, key="-LOAD-",
                 enable_events=True
             )
         ]
     ]
     for field in fields:
-        elements += [
+        layout += [
             [sg.Text(fields[field], size=(10, 1)),
              sg.Text("", size=(25, 1), key=field)]
         ]
-    window = sg.Window("Image information", elements)
+    window = sg.Window("Image information", layout)
 
     while True:
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event == "load":
-            image_path = Path(values["load"])
+        if event == "-LOAD-":
+            image_path = Path(values["-LOAD-"])
             exif_data = get_exif_data(image_path.absolute())
             for field in fields:
                 if field == "File name":

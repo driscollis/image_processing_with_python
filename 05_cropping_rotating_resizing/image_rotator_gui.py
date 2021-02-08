@@ -31,8 +31,8 @@ def apply_rotate(image_file, effect):
 
 
 def apply_effect(values, window):
-    selected_effect = values["effects"]
-    image_file = values["filename"]
+    selected_effect = values["-EFFECTS-"]
+    image_file = values["-FILENAME-"]
     if image_file:
         if "Rotate" in selected_effect:
             apply_rotate(image_file, selected_effect)
@@ -41,14 +41,14 @@ def apply_effect(values, window):
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
         photo_img = ImageTk.PhotoImage(image)
-        window["image"].update(data=photo_img)
+        window["-IMAGE-"].update(data=photo_img)
 
 
 def save_image(values):
     save_filename = sg.popup_get_file(
         "File", file_types=file_types, save_as=True, no_window=True
     )
-    if save_filename == values["filename"]:
+    if save_filename == values["-FILENAME-"]:
         sg.popup_error(
             "You are not allowed to overwrite the original image!")
     else:
@@ -59,32 +59,33 @@ def save_image(values):
 
 def main():
     effect_names = list(effects.keys())
-    elements = [
-        [sg.Image(key="image")],
+    layout = [
+        [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
-            sg.Input(size=(25, 1), enable_events=True, key="filename"),
+            sg.Input(size=(25, 1), enable_events=True, key="-FILENAME-",
+                     readonly=True),
             sg.FileBrowse(file_types=file_types),
         ],
         [
             sg.Text("Effect"),
             sg.Combo(
-                effect_names, default_value="Normal", key="effects",
-                enable_events=True
+                effect_names, default_value="Normal", key="-EFFECTS-",
+                enable_events=True, readonly=True
             ),
         ],
-        [sg.Button("Save", key="save")],
+        [sg.Button("Save")],
     ]
 
-    window = sg.Window("Image Rotator App", elements)
+    window = sg.Window("Image Rotator App", layout, size=(450, 500))
 
     while True:
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event in ["filename", "effects"]:
+        if event in ["-FILENAME-", "-EFFECTS-"]:
             apply_effect(values, window)
-        if event == "save" and values["filename"]:
+        if event == "Save" and values["-FILENAME-"]:
             save_image(values)
 
     window.close()
