@@ -108,7 +108,7 @@ def main():
             apply_effect(values, window)
         filename_one = values["-FILENAME_ONE-"]
         filename_two = values["-FILENAME_TWO-"]
-        if event == "Save" and values["-FILENAME_ONE-"]:
+        if event == "Save" and filename_one:
             save_image(filename_one, filename_two)
 
     window.close()
