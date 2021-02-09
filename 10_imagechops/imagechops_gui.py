@@ -1,5 +1,6 @@
 # imagechops_gui.py
 
+import io
 import os
 import PySimpleGUI as sg
 import shutil
@@ -13,7 +14,7 @@ from darken_image import darken
 from diff_image import diff
 from invert_image import invert
 from lighten_image import lighten
-from PIL import Image, ImageTk
+from PIL import Image
 
 file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
 
@@ -52,24 +53,24 @@ def apply_effect(values, window):
 
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
-        photo_img = ImageTk.PhotoImage(image)
-        window["-IMAGE-"].update(data=photo_img)
+        bio = io.BytesIO()
+        image.save(bio, format="PNG")
+        window["-IMAGE-"].update(data=bio.getvalue())
 
 
 def create_row(label, key, file_types):
     return [
         sg.Text(label),
-        sg.Input(size=(25, 1), enable_events=True, key=key,
-                 readonly=True),
+        sg.Input(size=(25, 1), key=key),
         sg.FileBrowse(file_types=file_types),
     ]
 
 
-def save_image(values):
+def save_image(filename_one, filename_two):
     save_filename = sg.popup_get_file(
         "File", file_types=file_types, save_as=True, no_window=True
     )
-    filenames = [values["-FILENAME_ONE-"], values["-FILENAME_TWO-"]]
+    filenames = [filename_one, filename_two]
     if save_filename in filenames:
         sg.popup_error(
             "You are not allowed to overwrite the original image!")
@@ -84,6 +85,7 @@ def main():
     layout = [
         [sg.Image(key="-IMAGE-")],
         create_row("Image File 1:", "-FILENAME_ONE-", file_types),
+        [sg.Button("Load Image")],
         create_row("Image File 2:", "-FILENAME_TWO-", file_types),
         [
             sg.Text("Effect"),
@@ -97,15 +99,17 @@ def main():
 
     window = sg.Window("ImageChops GUI", layout, size=(450, 500))
 
-    events = ["-FILENAME_ONE-", "-FILENAME_TWO-", "-EFFECTS-"]
+    events = ["Load Image", "-FILENAME_TWO-", "-EFFECTS-"]
     while True:
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
         if event in events:
             apply_effect(values, window)
+        filename_one = values["-FILENAME_ONE-"]
+        filename_two = values["-FILENAME_TWO-"]
         if event == "Save" and values["-FILENAME_ONE-"]:
-            save_image(values)
+            save_image(filename_one, filename_two)
 
     window.close()
 

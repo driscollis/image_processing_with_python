@@ -1,6 +1,7 @@
 # text_gui.py
 
 import glob
+import io
 import os
 import PySimpleGUI as sg
 import shutil
@@ -10,7 +11,6 @@ from PIL import Image
 from PIL import ImageColor
 from PIL import ImageDraw
 from PIL import ImageFont
-from PIL import ImageTk
 
 file_types = [("JPEG (*.jpg)", "*.jpg"), ("All files (*.*)", "*.*")]
 tmp_file = tempfile.NamedTemporaryFile(suffix=".jpg").name
@@ -45,15 +45,15 @@ def apply_text(values, window):
             draw.text((x, y), text=text, font=font, fill=color)
             image.save(tmp_file)
 
-        photo_img = ImageTk.PhotoImage(image)
-        window["-IMAGE-"].update(data=photo_img)
+        bio = io.BytesIO()
+        image.save(bio, format="PNG")
+        window["-IMAGE-"].update(data=bio.getvalue())
 
 
 def create_row(label, key, file_types):
     return [
         sg.Text(label),
-        sg.Input(size=(25, 1), enable_events=True, key=key,
-                 readonly=True),
+        sg.Input(size=(25, 1), key=key),
         sg.FileBrowse(file_types=file_types),
     ]
 
@@ -104,6 +104,7 @@ def main():
         [sg.Menu(menu_items)],
         [sg.Image(key="-IMAGE-")],
         create_row("Image File:", "-FILENAME-", file_types),
+        [sg.Button("Load Image")],
         [sg.Text("Text:"), sg.Input(key="-TEXT-", enable_events=True)],
         [
             sg.Text("Text Position"),
@@ -123,7 +124,7 @@ def main():
             sg.Input("12", size=(5, 1), key="-FONT_SIZE-", enable_events=True),
 
         ],
-        [sg.Button("Save Image", enable_events=True)],
+        [sg.Button("Save Image")],
     ]
 
     window = sg.Window("Draw Text GUI", elements, size=(500, 500))
@@ -132,7 +133,7 @@ def main():
         event, values = window.read()
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-        if event in ["-FILENAME-", "-COLORS-", "-TTF-", "-FONT_SIZE-",
+        if event in ["Load Image", "-COLORS-", "-TTF-", "-FONT_SIZE-",
                      "-TEXT-X-", "-TEXT-Y-", "-TEXT-"]:
             apply_text(values, window)
         if event == "Save Image" and values["-FILENAME-"]:
@@ -141,6 +142,7 @@ def main():
             update_ttf_values(window)
 
     window.close()
+
 
 if __name__ == "__main__":
     main()
