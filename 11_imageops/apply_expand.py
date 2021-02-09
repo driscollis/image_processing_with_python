@@ -11,4 +11,4 @@ def expand(image_path, output_path, border, fill):
 
 if __name__ == "__main__":
     expand("flowers.jpg", "flower_border.jpg",
-             border=100, fill="yellow")
+           border=100, fill="yellow")
