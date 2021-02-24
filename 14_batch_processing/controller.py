@@ -18,6 +18,7 @@ def get_image_paths(path, recursive, file_format="png"):
     image_paths = glob.glob(search_path, recursive=recursive)
     return image_paths
 
+
 def resize_image(image_path, width, height, output_dir):
     pil_image = Image.open(image_path)
     im_w, im_h = pil_image.size

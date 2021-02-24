@@ -23,7 +23,7 @@ def resize(values):
         return
     if width is not None:
         width = int(width)
-    else:
+    if height is not None:
         height = int(height)
 
     image_paths = controller.get_image_paths(
@@ -31,7 +31,7 @@ def resize(values):
         values["-RECURSIVE-"],
         values["-FORMAT-"])
     if len(image_paths) < 1:
-        sg.popup("No images found")
+        sg.popup("No images found", modal=False)
         return
     controller.resize_images(image_paths, width, height,
                              output_folder)
@@ -39,16 +39,18 @@ def resize(values):
 
 def verify(input_folder, output_folder, width, height):
     if not width and not height:
-        sg.popup("Width or height has to be set")
+        sg.popup("Width or height has to be set",
+                 modal=False)
         return False
     if not input_folder:
-        sg.popup("Input folder not set")
+        sg.popup("Input folder not set", modal=False)
         return False
     if not output_folder:
-        sg.popup("Output folder not set")
+        sg.popup("Output folder not set", modal=False)
         return False
     if input_folder == output_folder:
-        sg.popup("input folder cannot be the same as output")
+        sg.popup("input folder cannot be the same as output",
+                 modal=False)
         return False
     return True
 
@@ -79,10 +81,10 @@ def main():
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
         if event == '-WIDTH-' and values['-WIDTH-']:
-            if not values['-WIDTH-'].isdigit():
+            if not values['-WIDTH-'][-1].isdigit():
                 window["-WIDTH-"].update(values['-WIDTH-'][:-1])
         elif event == "-HEIGHT-" and values['-HEIGHT-']:
-            if not values['-HEIGHT-'].isdigit():
+            if not values['-HEIGHT-'][-1].isdigit():
                 window["-HEIGHT-"].update(values['-HEIGHT-'][:-1])
         elif event == "Resize":
             resize(values)
