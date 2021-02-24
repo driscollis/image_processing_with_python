@@ -50,12 +50,15 @@ def resize_images(image_paths, width, height, output_dir):
     images_converted = 0
     with ThreadPoolExecutor(max_workers=5) as executor:
         futures = [
-            executor.submit(resize_image, image_path, width, height, output_dir) for
+            executor.submit(resize_image, image_path, width, height,
+                            output_dir) for
             image_path in image_paths
         ]
         for future in as_completed(futures):
-            images_converted += 1
-            print(future.result())
+            result = future.result()
+            if "Skipping" not in result:
+                images_converted += 1
+            print(result)
 
     end = time.time()
     print(f"Converted {images_converted} image(s) in {end-start} seconds.")
