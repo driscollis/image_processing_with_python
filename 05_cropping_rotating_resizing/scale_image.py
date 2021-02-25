@@ -1,5 +1,6 @@
 # scale_image.py
 
+import sys
 from PIL import Image
 
 
@@ -19,7 +20,7 @@ def scale(input_image_path,
         max_size = (w, height)
     else:
         # No width or height specified
-        raise RuntimeError("Width or height required!")
+        sys.exit("Width or height required!")
 
     image.thumbnail(max_size, Image.ANTIALIAS)
     image.save(output_image_path)
