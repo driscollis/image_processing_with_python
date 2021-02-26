@@ -6,7 +6,7 @@ from PIL import Image, ImageOps
 def autocontrast(image_path, output_path, cutoff=0,
                  ignore=None):
     image = Image.open(image_path)
-    converted_image = ImageOps.autocontrast(image)
+    converted_image = ImageOps.autocontrast(image, cutoff, ignore)
     converted_image.save(output_path)
 
 
