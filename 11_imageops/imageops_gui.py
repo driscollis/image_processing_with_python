@@ -34,8 +34,6 @@ effects = {
 
 def apply_effect(image_file_one, effect, image_obj):
     if os.path.exists(image_file_one):
-        if not os.path.exists(tmp_file):
-            shutil.copy(image_file_one, tmp_file)
         effects[effect](image_file_one, tmp_file)
 
         image = Image.open(tmp_file)
