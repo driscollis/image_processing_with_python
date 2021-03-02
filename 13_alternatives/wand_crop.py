@@ -5,7 +5,7 @@ from wand.image import Image
 
 def crop(input_image_path, output_path, left, top, width, height):
     with Image(filename=input_image_path) as img:
-        img.crop(100, 800, width=width, height=height)
+        img.crop(left, top, width=width, height=height)
         img.save(filename=output_path)
 
 
