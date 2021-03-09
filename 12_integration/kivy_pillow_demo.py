@@ -11,13 +11,11 @@ class MyApp(App):
     def build(self):
         image = Image(source="")
         pil_image = PilImage.open("pink_flower.jpg")
-        data = BytesIO()
-        # Save PIL image to memory
-        pil_image.save(data, format='png')
+        img_data = BytesIO()
 
-        # Read the data from memory into new BytesIO object
-        data.seek(0)
-        img_data = BytesIO(data.read())
+        # Save PIL image to memory
+        pil_image.save(img_data, format='png')
+        img_data.seek(0)
 
         # Update Kivy Image
         image.texture = CoreImage(img_data, ext="png").texture
