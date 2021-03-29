@@ -56,7 +56,7 @@ def save_image(values):
 def main():
     effect_names = list(effects.keys())
     layout = [
-        [sg.Image(key="-IMAGE-")],
+        [sg.Image(key="-IMAGE-", size=(400, 400))],
         [
             sg.Text("Image File"),
             sg.Input(size=(25, 1), key="-FILENAME-"),

@@ -102,7 +102,7 @@ def main():
 
     elements = [
         [sg.Menu(menu_items)],
-        [sg.Image(key="-IMAGE-")],
+        [sg.Image(key="-IMAGE-", size=(400, 400))],
         create_row("Image File:", "-FILENAME-", file_types),
         [sg.Button("Load Image")],
         [sg.Text("Text:"), sg.Input(key="-TEXT-", enable_events=True)],

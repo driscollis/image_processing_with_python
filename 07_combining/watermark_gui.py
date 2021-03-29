@@ -71,7 +71,7 @@ def save_image(values):
 def main():
     original_image = None
     layout = [
-        [sg.Image(key="-IMAGE-")],
+        [sg.Image(key="-IMAGE-", size=(400, 400))],
         create_row("Image File:", "-FILENAME-", file_types),
         create_row("Watermark File:", "-WATERMARK-",
                    [("PNG (*.png)", "*.png")]),

@@ -80,7 +80,7 @@ def save_image(values):
 def main():
     colors = list(ImageColor.colormap.keys())
     layout = [
-        [sg.Image(key="-IMAGE-")],
+        [sg.Image(key="-IMAGE-", size=(400, 400))],
         [
             sg.Text("Image File"),
             sg.Input(

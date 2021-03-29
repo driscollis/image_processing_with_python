@@ -83,7 +83,7 @@ def save_image(filename_one, filename_two):
 def main():
     effect_names = list(effects.keys())
     layout = [
-        [sg.Image(key="-IMAGE-")],
+        [sg.Image(key="-IMAGE-", size=(400, 400))],
         create_row("Image File 1:", "-FILENAME_ONE-", file_types),
         [sg.Button("Load Image")],
         create_row("Image File 2:", "-FILENAME_TWO-", file_types),
