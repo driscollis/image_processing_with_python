@@ -97,7 +97,7 @@ def main():
         [sg.Button("Save")],
     ]
 
-    window = sg.Window("ImageChops GUI", layout, size=(450, 500))
+    window = sg.Window("ImageChops GUI", layout, size=(450, 600))
 
     events = ["Load Image", "-FILENAME_TWO-", "-EFFECTS-"]
     while True:
