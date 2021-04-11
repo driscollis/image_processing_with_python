@@ -3,8 +3,7 @@
 from PIL import Image
 
 
-def composite_image(input_image_path, input_image_path_2,
-                    output_path):
+def composite_image(input_image_path, input_image_path_2, output_path):
     image1 = Image.open(input_image_path)
     image2 = Image.open(input_image_path_2).resize(image1.size)
     mask = Image.new("L", image1.size, 120)
@@ -13,5 +12,4 @@ def composite_image(input_image_path, input_image_path_2,
 
 
 if __name__ == "__main__":
-    composite_image("pilot_knob.jpg", "grasshopper.jpg",
-                    "composited.jpg")
+    composite_image("pilot_knob.jpg", "grasshopper.jpg", "composited.jpg")

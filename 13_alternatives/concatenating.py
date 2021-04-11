@@ -21,4 +21,4 @@ def concatenate(input_image_path, output_path):
     output.save(output_path)
 
 if __name__ == "__main__":
-    concatenate("author.jpg", "concatenated.jpg")
+    concatenate("author.jpg", "stacked.jpg")

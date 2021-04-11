@@ -10,5 +10,4 @@ def darken(image_path_one, image_path_two, output_path):
 
 
 if __name__ == "__main__":
-    darken("shell.png", "skyline.png",
-           "darker_images.jpg")
+    darken("shell.png", "skyline.png", "darker_image.jpg")

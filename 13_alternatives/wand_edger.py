@@ -9,6 +9,5 @@ def edge(input_image_path, output_path):
         img.edge(radius=3)
         img.save(filename=output_path)
 
-
 if __name__ == "__main__":
     edge("ducklings.jpg", "edged.jpg")

@@ -13,7 +13,7 @@ def center(output_path):
 
     new_width = (width - font_width) / 2
     new_height = (height - font_height) / 2
-    draw.text((new_width, new_height), text, fill="black")
+    draw.text((new_width, new_height), text, font=font, fill="black")
     image.save(output_path)
 
 if __name__ == "__main__":

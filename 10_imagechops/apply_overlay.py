@@ -10,5 +10,4 @@ def overlay(image_path_one, image_path_two, output_path):
 
 
 if __name__ == "__main__":
-    overlay("shell.png", "skyline.png",
-            "overlay.jpg")
+    overlay("shell.png", "skyline.png", "overlay.jpg")

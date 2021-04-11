@@ -30,7 +30,7 @@ effects = {
     "Hard Light": hard_light,
     "Soft Light": soft_light,
     "Overlay": overlay,
-}
+    }
 
 
 def apply_effect(values, window):
@@ -39,23 +39,23 @@ def apply_effect(values, window):
     image_file_two = values["-FILENAME_TWO-"]
     if os.path.exists(image_file_one):
         shutil.copy(image_file_one, tmp_file)
-        if selected_effect == "Normal":
-            effects[selected_effect](image_file_one, tmp_file)
-        elif selected_effect == "Negative":
+        if selected_effect in ["Normal", "Negative"]:
             effects[selected_effect](image_file_one, tmp_file)
         elif os.path.exists(image_file_two):
-            effects[selected_effect](image_file_one, image_file_two,
-                                     tmp_file)
+            effects[selected_effect](
+                image_file_one, image_file_two, tmp_file,
+                )
         elif selected_effect not in ["Normal", "Negative"]:
-            sg.popup("You need both images selected to apply "
-                     "this effect!")
+            sg.popup(
+                "You need both images selected to apply this effect!",
+                )
             return
 
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
         bio = io.BytesIO()
         image.save(bio, format="PNG")
-        window["-IMAGE-"].update(data=bio.getvalue())
+        window["-IMAGE-"].update(data=bio.getvalue(), size=(400,400))
 
 
 def create_row(label, key, file_types):
@@ -63,17 +63,17 @@ def create_row(label, key, file_types):
         sg.Text(label),
         sg.Input(size=(25, 1), key=key),
         sg.FileBrowse(file_types=file_types),
-    ]
+        ]
 
 
-def save_image(filename_one, filename_two):
+def save_image(*filenames):
     save_filename = sg.popup_get_file(
-        "File", file_types=file_types, save_as=True, no_window=True
-    )
-    filenames = [filename_one, filename_two]
+        "File", file_types=file_types, save_as=True, no_window=True,
+        )
     if save_filename in filenames:
         sg.popup_error(
-            "You are not allowed to overwrite the original image!")
+            "You are not allowed to overwrite the original images!",
+            )
     else:
         if save_filename:
             shutil.copy(tmp_file, save_filename)
@@ -83,7 +83,7 @@ def save_image(filename_one, filename_two):
 def main():
     effect_names = list(effects.keys())
     layout = [
-        [sg.Image(key="-IMAGE-", size=(400, 400))],
+        [sg.Image(key="-IMAGE-", size=(400,400))],
         create_row("Image File 1:", "-FILENAME_ONE-", file_types),
         [sg.Button("Load Image")],
         create_row("Image File 2:", "-FILENAME_TWO-", file_types),
@@ -91,11 +91,11 @@ def main():
             sg.Text("Effect"),
             sg.Combo(
                 effect_names, default_value="Normal", key="-EFFECTS-",
-                enable_events=True, readonly=True
-            ),
+                enable_events=True, readonly=True,
+                ),
         ],
         [sg.Button("Save")],
-    ]
+        ]
 
     window = sg.Window("ImageChops GUI", layout, size=(450, 600))
 

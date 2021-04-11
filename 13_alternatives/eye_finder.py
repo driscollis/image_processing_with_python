@@ -19,16 +19,26 @@ def find_eyes(image_path):
     haar_classifier = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
     eye_cascade = cv2.CascadeClassifier("haarcascade_eye.xml")
 
-    faces = haar_classifier.detectMultiScale(gray_img, scaleFactor=1.1, minNeighbors=5)
+    faces = haar_classifier.detectMultiScale(
+            gray_img, scaleFactor=1.1, minNeighbors=5,
+            )
     print("Number of faces found: {faces}".format(faces=len(faces)))
 
     for (x, y, width, height) in faces:
-        cv2.rectangle(color_img, (x, y), (x + width, y + height), (0, 255, 0), 2)
+        cv2.rectangle(
+                color_img,
+                (x, y), (x + width, y + height),
+                (0, 255, 0), 2,
+                )
         roi_gray = gray_img[y : y + height, x : x + width]
         roi_color = color_img[y : y + height, x : x + width]
         eyes = eye_cascade.detectMultiScale(roi_gray)
         for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+            cv2.rectangle(
+                    roi_color,
+                    (ex, ey), (ex + ew, ey + eh),
+                    (0, 255, 0), 2,
+                    )
 
     # Show the faces / eyes found
     cv2.imshow(filename, color_img)

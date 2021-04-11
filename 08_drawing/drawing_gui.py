@@ -41,19 +41,19 @@ def apply_drawing(values, window):
                 fill=fill_color,
                 width=width,
                 outline=outline_color,
-            )
+                )
         elif shape == "Rectangle":
             draw.rectangle(
                 (begin_x, begin_y, end_x, end_y),
                 fill=fill_color,
                 width=width,
                 outline=outline_color,
-            )
+                )
         image.save(tmp_file)
 
         bio = io.BytesIO()
         image.save(bio, format="PNG")
-        window["-IMAGE-"].update(data=bio.getvalue())
+        window["-IMAGE-"].update(data=bio.getvalue(), size=(400,400))
 
 
 def create_coords_elements(label, begin_x, begin_y, key1, key2):
@@ -61,16 +61,17 @@ def create_coords_elements(label, begin_x, begin_y, key1, key2):
         sg.Text(label),
         sg.Input(begin_x, size=(5, 1), key=key1, enable_events=True),
         sg.Input(begin_y, size=(5, 1), key=key2, enable_events=True),
-    ]
+        ]
 
 
 def save_image(values):
     save_filename = sg.popup_get_file(
-        "File", file_types=file_types, save_as=True, no_window=True
-    )
+        "File", file_types=file_types, save_as=True, no_window=True,
+        )
     if save_filename == values["-FILENAME-"]:
         sg.popup_error(
-            "You are not allowed to overwrite the original image!")
+            "You are not allowed to overwrite the original image!",
+            )
     else:
         if save_filename:
             shutil.copy(tmp_file, save_filename)
@@ -80,12 +81,12 @@ def save_image(values):
 def main():
     colors = list(ImageColor.colormap.keys())
     layout = [
-        [sg.Image(key="-IMAGE-", size=(400, 400))],
+        [sg.Image(key="-IMAGE-", size=(400,400))],
         [
             sg.Text("Image File"),
             sg.Input(
-                size=(25, 1), key="-FILENAME-"
-            ),
+                size=(25, 1), key="-FILENAME-",
+                ),
             sg.FileBrowse(file_types=file_types),
             sg.Button("Load Image"),
         ],
@@ -97,15 +98,15 @@ def main():
                 key="-SHAPES-",
                 enable_events=True,
                 readonly=True,
-            ),
+                ),
         ],
         [
             *create_coords_elements(
-                "Begin Coords", "10", "10", "-BEGIN_X-", "-BEGIN_Y-"
-            ),
+                "Begin Coords", "10", "10", "-BEGIN_X-", "-BEGIN_Y-",
+                ),
             *create_coords_elements(
-                "End Coords", "100", "100", "-END_X-", "-END_Y-"
-            ),
+                "End Coords", "100", "100", "-END_X-", "-END_Y-",
+                ),
         ],
         [
             sg.Text("Fill"),
@@ -114,23 +115,23 @@ def main():
                 default_value=colors[0],
                 key="-FILL_COLOR-",
                 enable_events=True,
-                readonly=True
-            ),
+                readonly=True,
+                ),
             sg.Text("Outline"),
             sg.Combo(
                 colors,
                 default_value=colors[0],
                 key="-OUTLINE_COLOR-",
                 enable_events=True,
-                readonly=True
-            ),
+                readonly=True,
+                ),
             sg.Text("Width"),
             sg.Input("3", size=(5, 1), key="-WIDTH-", enable_events=True),
         ],
         [sg.Button("Save")],
     ]
 
-    window = sg.Window("Drawing GUI", layout, size=(450, 500))
+    window = sg.Window("Drawing GUI", layout, size=(450, 575))
 
     events = [
         "Load Image",

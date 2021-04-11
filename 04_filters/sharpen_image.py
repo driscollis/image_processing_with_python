@@ -9,6 +9,5 @@ def sharpen(input_image, output_image):
     filtered_image = image.filter(ImageFilter.SHARPEN)
     filtered_image.save(output_image)
 
-
 if __name__ == "__main__":
     sharpen("grasshopper.jpg", "grasshopper_sharpened.jpg")
