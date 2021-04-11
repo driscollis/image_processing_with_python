@@ -8,11 +8,9 @@ import tempfile
 
 from apply_autocontrast import autocontrast
 from apply_equalize import equalize
-from apply_fit import fit
 from apply_flip import flip
 from apply_invert import invert
 from apply_mirror import mirror
-from apply_posterize import posterize
 from apply_solarize import solarize
 from PIL import Image
 
@@ -23,24 +21,21 @@ effects = {
     "Normal": shutil.copy,
     "Autocontrast": autocontrast,
     "Equalize": equalize,
-    "Fit": fit,
     "Flip": flip,
     "Mirror": mirror,
     "Negative": invert,
-    "Posterize": posterize,
     "Solarize": solarize,
-}
+    }
 
 
 def apply_effect(image_file_one, effect, image_obj):
     if os.path.exists(image_file_one):
         effects[effect](image_file_one, tmp_file)
-
         image = Image.open(tmp_file)
         image.thumbnail((400, 400))
         bio = io.BytesIO()
         image.save(bio, format="PNG")
-        image_obj.update(data=bio.getvalue())
+        image_obj.update(data=bio.getvalue(), size=(400,400))
 
 
 def create_row(label, key, file_types):
@@ -48,13 +43,13 @@ def create_row(label, key, file_types):
         sg.Text(label),
         sg.Input(size=(25, 1), key=key),
         sg.FileBrowse(file_types=file_types),
-    ]
+        ]
 
 
 def save_image(filename_one):
     save_filename = sg.popup_get_file(
-        "File", file_types=file_types, save_as=True, no_window=True
-    )
+        "File", file_types=file_types, save_as=True, no_window=True,
+        )
     if save_filename == filename_one:
         sg.popup_error("You are not allowed to overwrite the original image!")
     else:
@@ -66,7 +61,7 @@ def save_image(filename_one):
 def main():
     effect_names = list(effects.keys())
     layout = [
-        [sg.Image(key="-IMAGE-", size=(400, 400))],
+        [sg.Image(key="-IMAGE-", size=(400,400))],
         create_row("Image File 1:", "-FILENAME_ONE-", file_types),
         [sg.Button("Load Image")],
         [
@@ -77,7 +72,7 @@ def main():
                 key="-EFFECTS-",
                 enable_events=True,
                 readonly=True,
-            ),
+                ),
         ],
         [sg.Button("Save")],
     ]

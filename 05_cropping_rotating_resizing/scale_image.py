@@ -34,5 +34,5 @@ if __name__ == "__main__":
     scale(
         input_image_path="pilot_knob.jpg",
         output_image_path="pilot_knob_scaled.jpg",
-        width=800
-    )
+        width=800,
+        )

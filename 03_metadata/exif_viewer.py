@@ -6,25 +6,27 @@ from pathlib import Path
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-file_types = [("(JPEG (*.jpg)", "*.jpg"),
-              ("All files (*.*)", "*.*")]
+file_types = [
+        ("(JPEG (*.jpg)", "*.jpg"),
+        ("All files (*.*)", "*.*"),
+        ]
 
 fields = {
-    "File name": "File name",
-    "File size": "File size",
-    "Model": "Camera Model",
-    "ExifImageWidth": "Width",
-    "ExifImageHeight": "Height",
-    "DateTime": "Creation Date",
-    "static_line": "*",
-    "MaxApertureValue": "Aperture",
-    "ExposureTime": "Exposure",
-    "FNumber": "F-Stop",
-    "Flash": "Flash",
-    "FocalLength": "Focal Length",
-    "ISOSpeedRatings": "ISO",
-    "ShutterSpeedValue": "Shutter Speed",
-}
+        "File name": "File name",
+        "File size": "File size",
+        "Model": "Camera Model",
+        "ExifImageWidth": "Width",
+        "ExifImageHeight": "Height",
+        "DateTime": "Creation Date",
+        "static_line": "*",
+        "MaxApertureValue": "Aperture",
+        "ExposureTime": "Exposure",
+        "FNumber": "F-Stop",
+        "Flash": "Flash",
+        "FocalLength": "Focal Length",
+        "ISOSpeedRatings": "ISO",
+        "ShutterSpeedValue": "Shutter Speed",
+        }
 
 
 def get_exif_data(path):
@@ -49,19 +51,17 @@ def get_exif_data(path):
 
 
 def main():
-    layout = [
-        [
+    layout = [[
             sg.FileBrowse(
                 "Load image data", file_types=file_types, key="-LOAD-",
-                enable_events=True
-            )
-        ]
-    ]
+                enable_events=True,
+                )
+            ]]
     for field in fields:
-        layout += [
-            [sg.Text(fields[field], size=(10, 1)),
-             sg.Text("", size=(25, 1), key=field)]
-        ]
+        layout += [[
+                sg.Text(fields[field], size=(10, 1)),
+                sg.Text("", size=(25, 1), key=field),
+                ]]
     window = sg.Window("Image information", layout)
 
     while True:

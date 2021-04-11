@@ -9,6 +9,5 @@ def contour(input_image, output_image):
     filtered_image = image.filter(ImageFilter.CONTOUR)
     filtered_image.save(output_image)
 
-
 if __name__ == "__main__":
     contour("flowers_dallas.jpg", "flowers_contour.jpg")

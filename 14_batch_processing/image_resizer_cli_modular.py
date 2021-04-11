@@ -34,10 +34,10 @@ def main():
         return
     else:
         if controller.validate_directory(input_dir):
-            image_paths = controller.get_image_paths(
-                input_dir, args.recursive)
+            image_paths = controller.get_image_paths(input_dir, args.recursive)
             controller.resize_images(
-                image_paths, args.width, args.height, output_dir)
+                image_paths, args.width, args.height, output_dir,
+                )
 
 
 if __name__ == "__main__":

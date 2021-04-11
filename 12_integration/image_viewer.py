@@ -11,7 +11,7 @@ file_types = [("JPEG (*.jpg)", "*.jpg"),
 
 def main():
     layout = [
-        [sg.Image(key="-IMAGE-", size=(400,400))],
+        [sg.Image(key="-IMAGE-")],
         [
             sg.Text("Image File"),
             sg.Input(size=(25, 1), key="-FILE-"),
@@ -33,7 +33,7 @@ def main():
                 image.thumbnail((400, 400))
                 bio = io.BytesIO()
                 image.save(bio, format="PNG")
-                window["-IMAGE-"].update(data=bio.getvalue(), size=(400,400))
+                window["-IMAGE-"].update(data=bio.getvalue())
 
     window.close()
 

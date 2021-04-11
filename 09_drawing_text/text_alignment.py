@@ -10,7 +10,7 @@ def alignment(output_path):
     y = 10
     font = ImageFont.truetype("Gidole-Regular.ttf", size=12)
     for alignment in alignments:
-        draw.text((10, y), f"Hello from\n Pillow", font=font,
+        draw.text((10, y), f"Hello from\nPillow", font=font,
                 align=alignment, fill="black")
         y += 35
     image.save(output_path)

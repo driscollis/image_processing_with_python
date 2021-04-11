@@ -10,5 +10,4 @@ def soft_light(image_path_one, image_path_two, output_path):
 
 
 if __name__ == "__main__":
-    soft_light("shell.png", "skyline.png",
-               "soft_light.jpg")
+    soft_light("shell.png", "skyline.png", "soft_light.jpg")

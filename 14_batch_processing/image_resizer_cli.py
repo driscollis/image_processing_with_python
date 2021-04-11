@@ -8,12 +8,12 @@ import time
 from PIL import Image
 
 
-def get_image_paths(path, recursive):
-    if "/" == path[-1]:
-        search_path = path + "**/*.png"
-    else:
-        search_path = path + "/**/*.png"
-
+def get_image_paths(search_path, recursive):
+    if "/" != search_path[-1]:
+        search_path += "/"
+    if recursive:
+        search_path += "**/"
+    search_path += "*.png"
     image_paths = glob.glob(search_path, recursive=recursive)
     return image_paths
 
@@ -39,12 +39,15 @@ def resize_images(image_paths, width, height, output_dir):
         image_name = os.path.basename(image_path)
         output = os.path.join(output_dir, image_name)
         if height < im_h or width < im_w:
+            # convert image and inform user
             pil_image.thumbnail((width, height), Image.ANTIALIAS)
-            pil_image.save(output)
             print(f"{image_path} converted to {output}")
             images_converted += 1
         else:
+            # do not convert image, and inform user
             print(f"{image_path} size is smaller than new size. Skipping file.")
+        # save (converted) image to destination directory
+        pil_image.save(output)
     end = time.time()
     print(f"Converted {images_converted} image(s) in {end-start} seconds.")
     print(f"Output folder is: {output_dir}")

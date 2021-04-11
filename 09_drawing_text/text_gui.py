@@ -24,6 +24,7 @@ def get_value(key, values):
 
 
 def apply_text(values, window):
+    global ttf_files
     image_file = values["-FILENAME-"]
     font_name = values["-TTF-"]
     font_size = get_value("-FONT_SIZE-", values)
@@ -41,13 +42,14 @@ def apply_text(values, window):
             if font_name == "Default Font":
                 font = None
             else:
-                font = ImageFont.truetype(font_name, size=font_size)
+                font = ImageFont.truetype(
+                        ttf_files[font_name], size=font_size)
             draw.text((x, y), text=text, font=font, fill=color)
             image.save(tmp_file)
 
         bio = io.BytesIO()
         image.save(bio, format="PNG")
-        window["-IMAGE-"].update(data=bio.getvalue())
+        window["-IMAGE-"].update(data=bio.getvalue(), size=(400,400))
 
 
 def create_row(label, key, file_types):
@@ -55,7 +57,7 @@ def create_row(label, key, file_types):
         sg.Text(label),
         sg.Input(size=(25, 1), key=key),
         sg.FileBrowse(file_types=file_types),
-    ]
+        ]
 
 
 def get_ttf_files(directory=None):
@@ -73,11 +75,12 @@ def get_ttf_files(directory=None):
 
 def save_image(values):
     save_filename = sg.popup_get_file(
-        "File", file_types=file_types, save_as=True, no_window=True
-    )
+        "File", file_types=file_types, save_as=True, no_window=True,
+        )
     if save_filename == values["-FILENAME-"]:
         sg.popup_error(
-            "You are not allowed to overwrite the original image!")
+            "You are not allowed to overwrite the original image!",
+            )
     else:
         if save_filename:
             shutil.copy(tmp_file, save_filename)
@@ -85,12 +88,12 @@ def save_image(values):
 
 
 def update_ttf_values(window):
+    global ttf_files
     directory = sg.popup_get_folder("Get TTF Directory")
     if directory is not None:
         ttf_files = get_ttf_files(directory)
         new_values = list(ttf_files.keys())
-        window["-TTF-"].update(values=new_values,
-                               value=new_values[0])
+        window["-TTF-"].update(values=new_values, value=new_values[0])
 
 
 def main():
@@ -102,7 +105,7 @@ def main():
 
     elements = [
         [sg.Menu(menu_items)],
-        [sg.Image(key="-IMAGE-", size=(400, 400))],
+        [sg.Image(key="-IMAGE-", size=(400,400))],
         create_row("Image File:", "-FILENAME-", file_types),
         [sg.Button("Load Image")],
         [sg.Text("Text:"), sg.Input(key="-TEXT-", enable_events=True)],
@@ -127,7 +130,7 @@ def main():
         [sg.Button("Save Image")],
     ]
 
-    window = sg.Window("Draw Text GUI", elements, size=(500, 500))
+    window = sg.Window("Draw Text GUI", elements, size=(500, 600))
 
     while True:
         event, values = window.read()
@@ -142,7 +145,6 @@ def main():
             update_ttf_values(window)
 
     window.close()
-
 
 if __name__ == "__main__":
     main()

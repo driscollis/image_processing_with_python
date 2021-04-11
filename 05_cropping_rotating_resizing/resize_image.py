@@ -19,4 +19,4 @@ if __name__ == "__main__":
         input_image_path="pilot_knob.jpg",
         output_image_path="pilot_knob_small.jpg",
         size=(800, 400),
-    )
+        )

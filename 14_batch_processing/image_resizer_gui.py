@@ -33,8 +33,7 @@ def resize(values):
     if len(image_paths) < 1:
         sg.popup("No images found")
         return
-    controller.resize_images(image_paths, width, height,
-                             output_folder)
+    controller.resize_images(image_paths, width, height, output_folder)
 
 
 def verify(input_folder, output_folder, width, height):
@@ -59,7 +58,7 @@ def main():
         [sg.Checkbox("Recursive Search", key="-RECURSIVE-",
                      enable_events=True),
          sg.Text("Format:"),
-         sg.Combo(values=["jpg, png"], default_value="png",
+         sg.Combo(values=["jpg","png"], default_value="png",
                   readonly=True, key="-FORMAT-", enable_events=True)],
         create_row("Output Image Folder", "-OUTPUT_FOLDER-"),
         [
@@ -68,7 +67,7 @@ def main():
             sg.Text("Height"),
             sg.Input(key="-HEIGHT-", enable_events=True, size=(10, 5))
         ],
-        [sg.Output()],
+        [sg.Output(size=(80, 3))],
         [sg.Button("Resize")],
     ]
 

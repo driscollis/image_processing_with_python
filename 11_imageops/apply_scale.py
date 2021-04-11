@@ -10,5 +10,4 @@ def scale(image_path, output_path, factor):
 
 
 if __name__ == "__main__":
-    scale("flowers.jpg", "flower_scaled.jpg",
-          factor=0.5)
+    scale("flowers.jpg", "flower_scaled.jpg", factor=0.6)

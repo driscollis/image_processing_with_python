@@ -23,23 +23,24 @@ def convert_image(image_path):
 def create_row(label, key, file_types, save=False):
     if save:
         return [
-        sg.Text(label),
-        sg.Input(size=(25, 1), key=key),
-        sg.FileSaveAs(file_types=file_types)
-    ]
-    return [
-        sg.Text(label),
-        sg.Input(size=(25, 1), key=key),
-        sg.FileBrowse(file_types=file_types),
-    ]
+                sg.Text(label),
+                sg.Input(size=(25, 1), key=key),
+                sg.FileSaveAs(file_types=file_types),
+                ]
+    else:
+        return [
+                sg.Text(label),
+                sg.Input(size=(25, 1), key=key),
+                sg.FileBrowse(file_types=file_types),
+                ]
 
 
 def apply_watermark(original_image, values, position, window):
     watermark_with_transparency(
-        original_image, tmp_file, values["-WATERMARK-"], position
-    )
+            original_image, tmp_file, values["-WATERMARK-"], position,
+            )
     photo_img = convert_image(tmp_file)
-    window["-IMAGE-"].update(data=photo_img)
+    window["-IMAGE-"].update(data=photo_img, size=(400,400))
 
 
 def check_for_errors(values):
@@ -57,11 +58,12 @@ def check_for_errors(values):
 
 def save_image(values):
     save_filename = sg.popup_get_file(
-        "File", file_types=file_types, save_as=True, no_window=True
-    )
+            "File", file_types=file_types, save_as=True, no_window=True,
+            )
     if save_filename == values["-FILENAME-"]:
         sg.popup_error(
-            "You are not allowed to overwrite the original image!")
+                "You are not allowed to overwrite the original image!",
+                )
     else:
         if save_filename:
             shutil.copy(tmp_file, save_filename)
@@ -71,7 +73,7 @@ def save_image(values):
 def main():
     original_image = None
     layout = [
-        [sg.Image(key="-IMAGE-", size=(400, 400))],
+        [sg.Image(key="-IMAGE-", size=(400,400))],
         create_row("Image File:", "-FILENAME-", file_types),
         create_row("Watermark File:", "-WATERMARK-",
                    [("PNG (*.png)", "*.png")]),
@@ -85,19 +87,20 @@ def main():
             sg.Input("0", size=(5, 1), enable_events=True,
                      key="-WATERMARK-Y-"),
         ],
-        [sg.Button("Apply Watermark", enable_events=True),
-         sg.Button("Save Image", enable_events=True),
-         ],
+        [
+            sg.Button("Apply Watermark", enable_events=True),
+            sg.Button("Save Image", enable_events=True),
+        ],
     ]
 
-    window = sg.Window("Watermark GUI", layout, size=(450, 500))
+    window = sg.Window("Watermark GUI", layout, size=(450, 600))
 
     while True:
         event, values = window.read()
 
         if event == "Exit" or event == sg.WIN_CLOSED:
             break
-
+        
         watermark_x = values["-WATERMARK-X-"]
         watermark_y = values["-WATERMARK-Y-"]
 
@@ -105,7 +108,7 @@ def main():
             filename = values["-FILENAME-"]
             if os.path.exists(filename):
                 photo_img = convert_image(filename)
-                window["-IMAGE-"].update(data=photo_img)
+                window["-IMAGE-"].update(data=photo_img, size=(400,400))
                 original_image = filename
                 shutil.copy(original_image, tmp_file)
         if event in ["-WATERMARK-X-", "-WATERMARK-Y-"]:
@@ -118,8 +121,7 @@ def main():
         if event == "Apply Watermark":
             if check_for_errors(values):
                 continue
-            position = (int(watermark_x),
-                        int(watermark_y))
+            position = (int(watermark_x), int(watermark_y))
             apply_watermark(original_image, values, position, window)
         if event == "Save Image" and values["-FILENAME-"]:
             save_image(values)

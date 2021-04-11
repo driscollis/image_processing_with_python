@@ -11,9 +11,9 @@ class MyApp(App):
     def build(self):
         image = Image(source="")
         pil_image = PilImage.open("pink_flower.jpg")
-        img_data = BytesIO()
 
         # Save PIL image to memory
+        img_data = BytesIO()
         pil_image.save(img_data, format='png')
         img_data.seek(0)
 

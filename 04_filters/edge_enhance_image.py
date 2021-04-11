@@ -9,6 +9,5 @@ def edge_enhance(input_image, output_image):
     filtered_image = image.filter(ImageFilter.EDGE_ENHANCE)
     filtered_image.save(output_image)
 
-
 if __name__ == "__main__":
     edge_enhance("cactus.jpg", "cactus_edge.jpg")

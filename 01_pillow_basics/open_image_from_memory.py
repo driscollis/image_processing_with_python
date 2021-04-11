@@ -1,4 +1,4 @@
-# open_image_from_memory_2.py
+# open_image_from_memory.py
 
 import io
 import urllib.request

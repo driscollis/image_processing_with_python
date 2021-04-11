@@ -3,8 +3,10 @@
 from PIL import Image
 
 
-def watermark_with_transparency(input_image_path, output_image_path,
-                                watermark_image_path, position):
+def watermark_with_transparency(
+        input_image_path, output_image_path, 
+        watermark_image_path, position,
+    ):
     base_image = Image.open(input_image_path)
     watermark = Image.open(watermark_image_path)
     width, height = base_image.size
@@ -17,5 +19,5 @@ def watermark_with_transparency(input_image_path, output_image_path,
 if __name__ == "__main__":
     watermark_with_transparency(
         "hummingbird.jpg", "hummingbird_watermarked2.jpg", "logo.png",
-        position=(0, 0)
-    )
+        position=(0, 0),
+        )

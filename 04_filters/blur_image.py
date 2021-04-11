@@ -9,6 +9,5 @@ def blur(input_image, output_image):
     filtered_image = image.filter(ImageFilter.BLUR)
     filtered_image.save(output_image)
 
-
 if __name__ == "__main__":
     blur("butterfly.jpg", "butterfly_blurred.jpg")

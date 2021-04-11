@@ -3,8 +3,10 @@
 from PIL import Image
 
 
-def watermark(input_image_path, output_image_path,
-              watermark_image_path, position):
+def watermark(
+        input_image_path, output_image_path,
+        watermark_image_path, position,
+    ):
     base_image = Image.open(input_image_path)
     watermark_image = Image.open(watermark_image_path)
     # add watermark to your image
