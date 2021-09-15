@@ -4,6 +4,8 @@
 
 Code for the book, **Pillow: Image Processing with Python** by Michael Driscoll
 
-Book release date: **April 2021**
+## Order on the following websites:
 
-Pre-order on Leanpub: [https://leanpub.com/pillow](https://leanpub.com/pillow)
+- [Leanpub](https://leanpub.com/pillow) (PDF, epub, mobi)
+- [Gumroad](https://gum.co/pypillow) (PDF, epub, mobi)
+- [Amazon](https://www.amazon.com/dp/B08ZCQM1C1) (paperback and Kindle)
