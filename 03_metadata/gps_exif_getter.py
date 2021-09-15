@@ -7,7 +7,7 @@ from PIL.ExifTags import TAGS, GPSTAGS
 def get_exif(image_file_path):
     exif_table = {}
     image = Image.open(image_file_path)
-    info = image.getexif()
+    info = image._getexif()
     for tag, value in info.items():
         decoded = TAGS.get(tag, tag)
         exif_table[decoded] = value
