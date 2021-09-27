@@ -20,13 +20,13 @@ effects = {
     "Black and White": black_and_white,
     "Grayscale": grayscale,
     "Sepia": sepia,
-}
+    }
 
 
 def main():
     effect_names = list(effects.keys())
     layout = [
-        [sg.Image(key="-IMAGE-", size=(400, 400))],
+        [sg.Image(key="-IMAGE-", size=(400,400))],
         [
             sg.Text("Image File"),
             sg.Input(size=(25, 1), key="-FILENAME-"),
@@ -38,7 +38,7 @@ def main():
             sg.Combo(
                 effect_names, default_value="Normal", key="-EFFECTS-",
                 enable_events=True, readonly=True
-            ),
+                ),
         ],
         [sg.Button("Save")],
     ]
@@ -52,13 +52,13 @@ def main():
         if event in ["Load Image", "-EFFECTS-"]:
             selected_effect = values["-EFFECTS-"]
             image_file = values["-FILENAME-"]
-            if os.path.exists(image_file):
+            if image_file:
                 effects[selected_effect](image_file, tmp_file)
                 image = Image.open(tmp_file)
                 image.thumbnail((400, 400))
                 bio = io.BytesIO()
                 image.save(bio, format="PNG")
-                window["-IMAGE-"].update(data=bio.getvalue())
+                window["-IMAGE-"].update(data=bio.getvalue(), size=(400,400))
         if event == "Save" and values["-FILENAME-"]:
             save_filename = sg.popup_get_file(
                 "File", file_types=file_types, save_as=True, no_window=True

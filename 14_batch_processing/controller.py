@@ -9,12 +9,12 @@ from concurrent.futures import as_completed
 from PIL import Image
 
 
-def get_image_paths(path, recursive, file_format="png"):
-    if "/" == path[-1]:
-        search_path = path + f"**/*.{file_format}"
-    else:
-        search_path = path + f"/**/*.{file_format}"
-
+def get_image_paths(search_path, recursive, file_format="png"):
+    if "/" != search_path[-1]:
+        search_path += "/"
+    if recursive:
+        search_path += "**/"
+    search_path += f"*.{file_format}"
     image_paths = glob.glob(search_path, recursive=recursive)
     return image_paths
 
@@ -29,7 +29,8 @@ def resize_image(image_path, width, height, output_dir):
         pil_image.save(output)
         return f"{image_path} converted to {output}"
     else:
-        return f"{image_path} size is smaller than new size. Skipping file."
+        pil_image.save(output)
+        return f"{image_path} copied to {output}."
 
 
 def resize_images(image_paths, width, height, output_dir):
@@ -49,15 +50,16 @@ def resize_images(image_paths, width, height, output_dir):
     images_converted = 0
     with ThreadPoolExecutor(max_workers=5) as executor:
         futures = [
-            executor.submit(resize_image, image_path, width, height,
-                            output_dir) for
-            image_path in image_paths
-        ]
+                executor.submit(
+                    resize_image, image_path, width, height, output_dir,
+                    )
+                for image_path in image_paths
+                ]
         for future in as_completed(futures):
             result = future.result()
-            if "Skipping" not in result:
+            if "converted" in result:
                 images_converted += 1
-            print(result)
+            print(future.result())
 
     end = time.time()
     print(f"Converted {images_converted} image(s) in {end-start} seconds.")

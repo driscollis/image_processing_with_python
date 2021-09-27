@@ -9,7 +9,7 @@ def text(input_image_path, output_path):
     y = 10
     for font_size in range(12, 75, 10):
         font = ImageFont.truetype("Gidole-Regular.ttf", size=font_size)
-        draw.text((10, y), f"Chihuly Exhibit ({font_size=})", font=font)
+        draw.text((10, y), f"Chihuly Exhibit ({font_size=}", font=font)
         y += 35
     image.save(output_path)
 

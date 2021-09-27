@@ -11,4 +11,4 @@ def smooth(input_image, output_image):
 
 
 if __name__ == "__main__":
-    smooth("spider.jpg", "spider_smooth_more.jpg")
+    smooth("spider.jpg", "spider_smooth.jpg")

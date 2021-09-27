@@ -1,4 +1,4 @@
-# psg_pilloww_demo.py
+# psg_pillow_demo.py
 
 import PySimpleGUI as sg
 from PIL import Image, ImageTk

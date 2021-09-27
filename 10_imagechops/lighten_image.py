@@ -10,5 +10,4 @@ def lighten(image_path_one, image_path_two, output_path):
 
 
 if __name__ == "__main__":
-    lighten("shell.png", "skyline.png",
-            "lighter_image.jpg")
+    lighten("shell.png", "skyline.png", "lighter_image.jpg")

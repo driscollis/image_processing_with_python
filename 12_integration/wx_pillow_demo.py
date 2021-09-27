@@ -12,8 +12,7 @@ class ImagePanel(wx.Panel):
         width, height = pil_img.size
         bitmap = wx.BitmapFromBuffer(width, height, pil_img.tobytes())
 
-        self.image_ctrl = wx.StaticBitmap(
-            self, bitmap=wx.Bitmap(bitmap))
+        self.image_ctrl = wx.StaticBitmap(self, bitmap=wx.Bitmap(bitmap))
 
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         main_sizer.Add(self.image_ctrl, 0, wx.ALL, 5)
@@ -21,6 +20,7 @@ class ImagePanel(wx.Panel):
         self.SetSizer(main_sizer)
         main_sizer.Fit(parent)
         self.Layout()
+
 
 class MainFrame(wx.Frame):
     def __init__(self):

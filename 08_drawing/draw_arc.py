@@ -8,7 +8,7 @@ def arc(output_path):
     draw = ImageDraw.Draw(image)
     draw.arc((25, 50, 175, 200), start=30, end=250, fill="green")
 
-    draw.arc((100, 150, 275, 300), start=20, end=100, width=5,
+    draw.arc((100, 150, 275, 300), start=20, end=100, width=5, 
              fill="yellow")
 
     image.save(output_path)

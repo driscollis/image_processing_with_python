@@ -13,4 +13,4 @@ def blend(input_image_path, input_image_path_2, output_path, alpha):
     blended_image.save(output_path)
 
 if __name__ == "__main__":
-    blend("skyline.png", "shell.png", "blended.png", alpha=0.4)
+    blend("skyline.png", "shell.png", "blended.png", alpha=0.2)

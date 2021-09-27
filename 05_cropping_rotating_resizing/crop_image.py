@@ -10,6 +10,6 @@ def crop_image(image_path, coords, output_image_path):
 
 
 if __name__ == "__main__":
-    crop_image("green_mantis.jpeg",
-               (302, 101, 910, 574),
+    crop_image("green_mantis.jpeg", 
+               (302, 101, 910, 574), 
                "cropped_mantis.jpg")

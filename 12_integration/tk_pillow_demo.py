@@ -3,6 +3,7 @@
 from tkinter import Tk, Canvas, NW
 from PIL import Image, ImageTk
 
+
 def main():
     root = Tk()
     root.title("Tkinter Image Viewer")
