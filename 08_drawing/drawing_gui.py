@@ -130,7 +130,7 @@ def main():
         [sg.Button("Save")],
     ]
 
-    window = sg.Window("Drawing GUI", layout, size=(450, 500))
+    window = sg.Window("Drawing GUI", layout)
 
     events = [
         "Load Image",

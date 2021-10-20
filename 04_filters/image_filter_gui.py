@@ -73,7 +73,7 @@ def main():
         [sg.Button("Save")],
     ]
 
-    window = sg.Window("Image Filter App", layout, size=(450, 500))
+    window = sg.Window("Image Filter App", layout)
 
     while True:
         event, values = window.read()

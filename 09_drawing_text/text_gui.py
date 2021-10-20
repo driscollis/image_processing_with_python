@@ -100,7 +100,7 @@ def main():
 
     menu_items = [["File", ["Open Font Directory"]]]
 
-    elements = [
+    layout = [
         [sg.Menu(menu_items)],
         [sg.Image(key="-IMAGE-", size=(400, 400))],
         create_row("Image File:", "-FILENAME-", file_types),
@@ -127,7 +127,7 @@ def main():
         [sg.Button("Save Image")],
     ]
 
-    window = sg.Window("Draw Text GUI", elements, size=(500, 500))
+    window = sg.Window("Draw Text GUI", layout)
 
     while True:
         event, values = window.read()

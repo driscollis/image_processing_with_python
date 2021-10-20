@@ -90,7 +90,7 @@ def main():
          ],
     ]
 
-    window = sg.Window("Watermark GUI", layout, size=(450, 500))
+    window = sg.Window("Watermark GUI", layout)
 
     while True:
         event, values = window.read()

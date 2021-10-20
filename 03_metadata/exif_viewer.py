@@ -59,7 +59,7 @@ def main():
     ]
     for field in fields:
         layout += [
-            [sg.Text(fields[field], size=(10, 1)),
+            [sg.Text(fields[field], size=(15, 1)),
              sg.Text("", size=(25, 1), key=field)]
         ]
     window = sg.Window("Image information", layout)
